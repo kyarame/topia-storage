@@ -31,7 +31,8 @@ const decodeBase64 = (_input: string) => {
 };
 
 function Viewer({ filename }: { filename: string }) {
-  const downloadFilename = decodeBase64(filename);
+  const downloadFilename = filename.slice(0, 7) +
+    decodeBase64(filename.slice(7));
   const [, setLocation] = useLocation();
 
   return (
