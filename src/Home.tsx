@@ -54,7 +54,8 @@ function Home() {
               setUploading(true);
 
               const filename = fileInput.current.files[0].name;
-              const bucket = `${nanoid(5)}__${filename}`;
+              const hash = nanoid(5);
+              const bucket = `${hash}__${filename}`;
               const prefix = "user/1/record/";
 
               await uploadFile(
@@ -65,7 +66,7 @@ function Home() {
               setUploading(false);
               setLocation(
                 `/${
-                  encodeURIComponent(`${nanoid(5)}__${await encodeBase64(
+                  encodeURIComponent(`${hash}__${await encodeBase64(
                     filename,
                   )}`)
                 }`,
