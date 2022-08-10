@@ -31,7 +31,9 @@ function Home() {
       <button
         className={tw`outline-none(& hover:& focus:&)`}
         onClick={() => {
-          fileInput.current?.click();
+          if (!isUploading) {
+            fileInput.current?.click();
+          }
         }}
       >
         <img
