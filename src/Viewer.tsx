@@ -30,22 +30,8 @@ const decodeBase64 = (_input: string) => {
   return atob(input);
 };
 
-const downloadFile = (url: string, filename: string) =>
-  fetch(url)
-    .then((resp) => resp.blob())
-    .then((blob) => {
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.style.display = "none";
-      a.href = url;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-    });
-
 function Viewer({ filename }: { filename: string }) {
-  const downloadFilename = decodeBase64(filename.slice(7));
+  const downloadFilename = decodeBase64(filename);
   const [, setLocation] = useLocation();
 
   return (
@@ -60,18 +46,17 @@ function Viewer({ filename }: { filename: string }) {
       <div
         className={tw`w-full max-w-max`}
       >
-        <span
-          onClick={() => {
-            downloadFile(
-              `https://firebasestorage.googleapis.com/v0/b/enlil-202912.appspot.com/o/user%2F1%2Frecord%2F${filename}?alt=media`,
-              downloadFilename,
-            );
-          }}
+        <a
+          href={`https://firebasestorage.googleapis.com/v0/b/enlil-202912.appspot.com/o/user%2F1%2Frecord%2F${
+            encodeURIComponent(downloadFilename)
+          }?alt=media`}
+          target="_blank"
           className={tw
-            `text(green-500 hover:white) px-6 py-4 rounded-xl bg(white hover:green-500) transition-colors duration-150 bg-opacity-80 cursor-pointer`}
+            `text(green-500 hover:white) px-6 py-4 rounded-xl bg(white hover:green-500) transition-colors duration-150 bg-opacity-80`}
+          download={downloadFilename.slice(7)}
         >
-          {downloadFilename}
-        </span>
+          {downloadFilename.slice(7)}
+        </a>
       </div>
     </div>
   );

@@ -27,7 +27,7 @@ function Home() {
   const [location, setLocation] = useLocation();
 
   return (
-    <div className={tw`w-full h-full grid place-items-center`}>
+    <div className={tw`grid w-full h-full place-items-center`}>
       <button
         className={tw`outline-none(& hover:& focus:&)`}
         onClick={() => {
@@ -54,9 +54,7 @@ function Home() {
               setUploading(true);
 
               const filename = fileInput.current.files[0].name;
-              const bucket = `${nanoid(5)}__${await encodeBase64(
-                filename,
-              )}`;
+              const bucket = `${nanoid(5)}__${filename}`;
               const prefix = "user/1/record/";
 
               await uploadFile(
@@ -65,7 +63,13 @@ function Home() {
               );
 
               setUploading(false);
-              setLocation(`/${encodeURIComponent(bucket)}`);
+              setLocation(
+                `/${
+                  encodeURIComponent(`${nanoid(5)}__${await encodeBase64(
+                    filename,
+                  )}`)
+                }`,
+              );
             }}
           />
         </div>
