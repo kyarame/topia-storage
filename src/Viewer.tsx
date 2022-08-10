@@ -31,8 +31,18 @@ const decodeBase64 = (_input: string) => {
 };
 
 const downloadFile = (url: string, filename: string) =>
-  Object.assign(document.createElement("a"), { href: url, download: filename })
-    .click();
+  fetch(url)
+    .then((resp) => resp.blob())
+    .then((blob) => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.style.display = "none";
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
 
 function Viewer({ filename }: { filename: string }) {
   const downloadFilename = decodeBase64(filename.slice(7));
@@ -40,7 +50,7 @@ function Viewer({ filename }: { filename: string }) {
 
   return (
     <div
-      className={tw`absolute top-0 w-full h-full p-8 grid place-items-center`}
+      className={tw`absolute top-0 grid w-full h-full p-8 place-items-center`}
       onClick={(e: MouseEvent) => {
         if (e.currentTarget === e.target) {
           setLocation("/");
