@@ -8,7 +8,7 @@ const USER_AGENT =
 
 export async function uploadFile(
   bucket: string,
-  body: Buffer,
+  body: any,
   firebaseAccessToken: string,
 ) {
   const resumableResponse = await fetch(
@@ -114,7 +114,7 @@ export default async (request: VercelRequest, response: VercelResponse) => {
 
     const result = await uploadFile(
       request.query.bucket as string,
-      Buffer.from(request.body),
+      request.body,
       request.query.accessToken as string,
     );
 

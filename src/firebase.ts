@@ -14,14 +14,18 @@ async function getFirebaseAccessToken() {
     )
       .then((x) => x.json());
 
-    localStorage.setItem("refreshToken", token.refreshToken);
-    localStorage.setItem("accessToken", token.accessToken);
-    localStorage.setItem(
-      "accessTokenExpiresAt",
-      token.accessTokenExpiresAt.toString(),
-    );
+    if (token.refreshToken && token.accessToken && token.accessTokenExpiresAt) {
+      localStorage.setItem("refreshToken", token.refreshToken);
+      localStorage.setItem("accessToken", token.accessToken);
+      localStorage.setItem(
+        "accessTokenExpiresAt",
+        token.accessTokenExpiresAt.toString(),
+      );
 
-    return token.accessToken;
+      return token.accessToken;
+    }
+
+    throw new Error("Failed to get an access token");
   }
 
   return accessToken;
@@ -40,8 +44,9 @@ export async function uploadFile(
       method: "POST",
       headers: {
         Accept: "application/json",
+        "Content-Type": "application/octet-stream",
       },
-      body: await file.text(),
+      body: file,
     },
   );
 }
