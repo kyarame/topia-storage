@@ -45,15 +45,13 @@ function Viewer({ filename }: { filename: string }) {
       }}
     >
       <div
-        className={tw`w-full max-w-max`}
+        className={tw`w-96 max-w-max text(green-500 hover:white) px-6 py-4 rounded-xl bg(white hover:green-500) transition-colors duration-150 bg-opacity-80(& hover:&) cursor-pointer`}
       >
         <a
           href={`https://firebasestorage.googleapis.com/v0/b/enlil-202912.appspot.com/o/user%2F1%2Frecord%2F${
             encodeURIComponent(downloadFilename)
           }?alt=media`}
           target="_blank"
-          className={tw
-            `text(green-500 hover:white) px-6 py-4 rounded-xl bg(white hover:green-500) transition-colors duration-150 bg-opacity-80`}
           download={downloadFilename.slice(7)}
         >
           {downloadFilename.slice(7)}

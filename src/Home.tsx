@@ -53,7 +53,7 @@ function Home() {
 
               const file = fileInput.current.files[0];
               if (file.size > 4.5 * 1024 * 1024) {
-                alert("ファイルサイズが大きすぎます");
+                alert("最大ファイルサイズは4.5MBです。");
                 return;
               }
 
