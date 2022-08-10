@@ -48,29 +48,38 @@ function Home() {
             ref={fileInput}
             className={tw`opacity-0`}
             type="file"
-            onChange={async (e: ChangeEvent<HTMLInputElement>) => {
+            onChange={async () => {
               if (!fileInput.current?.files?.length || isUploading) return;
+
+              const file = fileInput.current.files[0];
+              if (file.size > 4.5 * 1024 * 1024) {
+                alert("ファイルサイズが大きすぎます");
+                return;
+              }
 
               setUploading(true);
 
-              const filename = fileInput.current.files[0].name;
+              const filename = file.name;
               const hash = nanoid(5);
               const bucket = `${hash}__${filename}`;
               const prefix = "user/1/record/";
 
-              await uploadFile(
+              const response = await uploadFile(
                 `${prefix}${bucket}`,
                 fileInput.current.files[0],
               );
 
+              if (response.ok) {
+                setLocation(
+                  `/${
+                    encodeURIComponent(`${hash}__${await encodeBase64(
+                      filename,
+                    )}`)
+                  }`,
+                );
+              }
+
               setUploading(false);
-              setLocation(
-                `/${
-                  encodeURIComponent(`${hash}__${await encodeBase64(
-                    filename,
-                  )}`)
-                }`,
-              );
             }}
           />
         </div>
