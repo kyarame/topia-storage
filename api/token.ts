@@ -88,14 +88,14 @@ export default async (request: VercelRequest, response: VercelResponse) => {
     if (refreshToken) {
       const result = await refreshIdToken(refreshToken as string);
       response.status(200).json({
-        refreshIdToken: result.refresh_token,
+        refreshToken: result.refresh_token,
         accessToken: result.access_token,
         accessTokenExpiresAt: Date.now() + 30 * 60 * 1000,
       });
     } else {
       const result = await signupNewUser();
       response.status(200).json({
-        refreshIdToken: result.refreshToken,
+        refreshToken: result.refreshToken,
         accessToken: result.idToken,
         accessTokenExpiresAt: Date.now() + 30 * 60 * 1000,
       });
